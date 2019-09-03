@@ -3,7 +3,7 @@ package outproxy
 import (
 	"log"
 
-    "github.com/armon/go-socks5"
+	"github.com/armon/go-socks5"
 	"github.com/eyedeekay/sam-forwarder/config"
 	"github.com/eyedeekay/sam-forwarder/interface"
 	"github.com/eyedeekay/sam-forwarder/tcp"
@@ -14,8 +14,8 @@ import (
 // tunnel
 type OutProxy struct {
 	Forwarder samtunnel.SAMTunnel
-    Conf     *socks5.Config
-    Socks    *socks5.Server
+	Conf      *socks5.Config
+	Socks     *socks5.Server
 	up        bool
 }
 
@@ -92,9 +92,9 @@ func (f *OutProxy) Serve() error {
 	go f.ServeParent()
 	if f.Up() {
 		log.Println("Starting SOCKS proxy", f.Target())
-        if err := f.Socks.ListenAndServe("tcp", f.Target()); err != nil {
-            panic(err)
-        }
+		if err := f.Socks.ListenAndServe("tcp", f.Target()); err != nil {
+			panic(err)
+		}
 	}
 	return nil
 }
@@ -120,25 +120,25 @@ func (s *OutProxy) Load() (samtunnel.SAMTunnel, error) {
 		return nil, e
 	}
 	s.Forwarder = f.(*samforwarder.SAMForwarder)
-    s.Socks, err = socks5.New(s.Conf)
-    if err != nil {
-        return nil, err
-    }
-    s.up = true
+	s.Socks, err = socks5.New(s.Conf)
+	if err != nil {
+		return nil, err
+	}
+	s.up = true
 	log.Println("Finished putting tunnel up")
 	return s, nil
 }
 
-//NewEepHttpd makes a new SAM forwarder with default options, accepts host:port arguments
-func NewEepHttpd(host, port string) (*OutProxy, error) {
-	return NewEepHttpdFromOptions(SetHost(host), SetPort(port))
+//NewOutProxyd makes a new SAM forwarder with default options, accepts host:port arguments
+func NewOutProxyd(host, port string) (*OutProxy, error) {
+	return NewOutProxydFromOptions(SetHost(host), SetPort(port))
 }
 
-//NewEepHttpdFromOptions makes a new SAM forwarder with default options, accepts host:port arguments
-func NewEepHttpdFromOptions(opts ...func(*OutProxy) error) (*OutProxy, error) {
+//NewOutProxydFromOptions makes a new SAM forwarder with default options, accepts host:port arguments
+func NewOutProxydFromOptions(opts ...func(*OutProxy) error) (*OutProxy, error) {
 	var s OutProxy
 	s.Forwarder = &samforwarder.SAMForwarder{}
-    s.Conf = &socks5.Config{}
+	s.Conf = &socks5.Config{}
 	log.Println("Initializing outproxy")
 	for _, o := range opts {
 		if err := o(&s); err != nil {

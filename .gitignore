@@ -10,3 +10,5 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+*.i2pkeys
+*/*.i2pkeys
