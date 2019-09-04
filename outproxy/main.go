@@ -87,7 +87,7 @@ func main() {
 	config.AccessListType = config.GetAccessListType(*accessListType, "none")
 	config.Type = config.GetTypes(false, false, false, "server")
 
-	eepsite, err = outproxy.NewOutProxydFromOptions(
+	eepsite, err = outproxy.NewOutProxyFromOptions(
 		outproxy.SetType(config.Type),
 		outproxy.SetSAMHost(config.SamHost),
 		outproxy.SetSAMPort(config.SamPort),

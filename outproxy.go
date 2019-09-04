@@ -130,12 +130,12 @@ func (s *OutProxy) Load() (samtunnel.SAMTunnel, error) {
 }
 
 //NewOutProxyd makes a new SAM forwarder with default options, accepts host:port arguments
-func NewOutProxyd(host, port string) (*OutProxy, error) {
-	return NewOutProxydFromOptions(SetHost(host), SetPort(port))
+func NewOutProxy(host, port string) (*OutProxy, error) {
+	return NewOutProxyFromOptions(SetHost(host), SetPort(port))
 }
 
 //NewOutProxydFromOptions makes a new SAM forwarder with default options, accepts host:port arguments
-func NewOutProxydFromOptions(opts ...func(*OutProxy) error) (*OutProxy, error) {
+func NewOutProxyFromOptions(opts ...func(*OutProxy) error) (*OutProxy, error) {
 	var s OutProxy
 	s.Forwarder = &samforwarder.SAMForwarder{}
 	s.Conf = &socks5.Config{}
