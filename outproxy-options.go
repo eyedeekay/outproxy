@@ -2,6 +2,7 @@ package outproxy
 
 import (
 	"fmt"
+    "net"
 	"strconv"
 )
 
@@ -429,6 +430,54 @@ func SetAccessList(s []string) func(*OutProxy) error {
 func SetKeyFile(s string) func(*OutProxy) error {
 	return func(c *OutProxy) error {
 		c.Forwarder.Config().KeyFilePath = s
+		return nil
+	}
+}
+
+func SetPorts(s []int) func(*OutProxy) error {
+	return func(c *OutProxy) error {
+        for _, v := range s {
+            c.Rules.Ports = append(c.Rules.Ports, v)
+        }
+		return nil
+	}
+}
+
+func SetDomains(s []string) func(*OutProxy) error {
+	return func(c *OutProxy) error {
+        for _, v := range s {
+            c.Rules.Domains = append(c.Rules.Domains, v)
+        }
+		return nil
+	}
+}
+
+func SetIPs(s []net.IP) func(*OutProxy) error {
+	return func(c *OutProxy) error {
+        for _, v := range s {
+            c.Rules.IPs = append(c.Rules.IPs, v)
+        }
+		return nil
+	}
+}
+
+func SetLimit(s float64) func(*OutProxy) error {
+	return func(c *OutProxy) error {
+		c.Rules.Limit = s
+		return nil
+	}
+}
+
+func SetBurst(s int) func(*OutProxy) error {
+	return func(c *OutProxy) error {
+		c.Rules.Burst = s
+		return nil
+	}
+}
+
+func SetPolicy(s bool) func(*OutProxy) error {
+	return func(c *OutProxy) error {
+		c.Rules.Default = s
 		return nil
 	}
 }

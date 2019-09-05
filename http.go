@@ -132,7 +132,7 @@ func NewHttpOutProxyd(host, port string) (*HttpOutProxy, error) {
 func NewHttpOutProxydFromOptions(opts ...func(*HttpOutProxy) error) (*HttpOutProxy, error) {
 	var s HttpOutProxy
 	s.Forwarder = &samforwarder.SAMForwarder{}
-    s.Prox = &Proxy{}
+	s.Prox = &Proxy{}
 	log.Println("Initializing outproxy")
 	for _, o := range opts {
 		if err := o(&s); err != nil {
