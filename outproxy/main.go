@@ -4,6 +4,9 @@ import (
 	"crypto/tls"
 	"flag"
 	"log"
+    "strings"
+    "strconv"
+    "net"
 )
 
 import (
@@ -47,8 +50,15 @@ var (
 	inBackupQuantity   = flag.Int("ib", 1, "Set inbound tunnel backup quantity(0 to 5)")
 	outBackupQuantity  = flag.Int("ob", 1, "Set outbound tunnel backup quantity(0 to 5)")
 	iniFile            = flag.String("f", "none", "Use an ini file for configuration")
-	useTLS             = flag.Bool("t", false, "Generate or use an existing TLS certificate")
-	certFile           = flag.String("m", "cert", "Certificate name to use")
+	//useTLS             = flag.Bool("t", false, "Generate or use an existing TLS certificate")
+	//certFile           = flag.String("m", "cert", "Certificate name to use")
+    acceptDefault      = flag.Bool("d", true, "Accept all requests by default")
+    portList        = flag.String("bp", "", "Create an excpeption to the rules for these ports by default(Comma-separated string)")
+    domainList      = flag.String("bd", "", "Create an exception to the rules for these domains(Comma-separated string)")
+    iPList          = flag.String("bi","","Create an exception to the rules for these IPs(Comma-separated string)")
+    limit           = flag.Int("rl", -1, "Rate-Limit rate")
+    burst           = flag.Int("rb", -1, "Rate-Limit burst")
+    bandwidth       = flag.Int("bw", -1, "Bandwidth limit")
 )
 
 func main() {
@@ -63,6 +73,19 @@ func main() {
 			log.Fatal(err)
 		}
 	}
+
+    pports := strings.Split(*portList, ",")
+    var ports []int
+    for _, v := range pports {
+        w, _ := strconv.Atoi(v)
+        ports = append(ports, w)
+    }
+    domains := strings.Split(*domainList, ",")
+    pips := strings.Split(*iPList, ",")
+    var ips []net.IP
+    for _, v := range pips {
+        ips = append(ips, net.ParseIP(v))
+    }
 	config.TargetHost = config.GetHost(*host, "127.0.0.1")
 	config.TargetPort = config.GetPort(*port, "7880")
 	config.SaveFile = config.GetSaveFile(*usei2p, true)
@@ -112,6 +135,13 @@ func main() {
 		outproxy.SetReduceIdleQuantity(config.ReduceIdleQuantity),
 		outproxy.SetAccessListType(config.AccessListType),
 		outproxy.SetAccessList(config.AccessList),
+        outproxy.SetPorts(ports),
+        outproxy.SetDomains(domains),
+        outproxy.SetIPs(ips),
+        outproxy.SetLimit(float64(*limit)),
+        outproxy.SetBurst(*burst),
+        outproxy.SetPolicy(*acceptDefault),
+        outproxy.SetByteLimit(int64(*bandwidth)),
 	)
 	if err != nil {
 		log.Fatal(err)
