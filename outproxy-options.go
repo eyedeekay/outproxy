@@ -4,6 +4,8 @@ import (
 	"fmt"
     "net"
 	"strconv"
+
+    "github.com/eyedeekay/sam-forwarder/tcp"
 )
 
 //Option is a OutProxy Option
@@ -478,6 +480,14 @@ func SetBurst(s int) func(*OutProxy) error {
 func SetPolicy(s bool) func(*OutProxy) error {
 	return func(c *OutProxy) error {
 		c.Rules.Default = s
+		return nil
+	}
+}
+
+//SetByteLimit sets the number of hops inbound
+func SetByteLimit(u int64) func(*OutProxy) error {
+	return func(c *OutProxy) error {
+		c.Forwarder.(*samforwarder.SAMForwarder).ByteLimit = u
 		return nil
 	}
 }
