@@ -52,7 +52,7 @@ var (
 	iniFile            = flag.String("f", "none", "Use an ini file for configuration")
 	//useTLS             = flag.Bool("t", false, "Generate or use an existing TLS certificate")
 	//certFile           = flag.String("m", "cert", "Certificate name to use")
-    acceptDefault      = flag.Bool("d", true, "Accept all requests by default")
+    acceptDefault      = flag.Bool("da", true, "Accept all requests by default")
     portList        = flag.String("bp", "", "Create an excpeption to the rules for these ports by default(Comma-separated string)")
     domainList      = flag.String("bd", "", "Create an exception to the rules for these domains(Comma-separated string)")
     iPList          = flag.String("bi","","Create an exception to the rules for these IPs(Comma-separated string)")

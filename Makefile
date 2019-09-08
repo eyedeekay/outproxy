@@ -1,4 +1,6 @@
 
+GO111MODULE=on
+
 build:
 	cd outproxy && go build -tags="netgo" \
 		-ldflags '-w -extldflags "-static"'
