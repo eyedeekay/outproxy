@@ -18,7 +18,6 @@ type OutProxy struct {
 	Forwarder samtunnel.SAMTunnel
 	Conf      *socks5.Config
 	Socks     *socks5.Server
-	Rules     *SocksRuleSet
 	up        bool
 }
 
