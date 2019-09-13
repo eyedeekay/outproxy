@@ -3,83 +3,27 @@ package tgtun
 
 import (
 	"log"
-//	"net/http"
 
-	"github.com/eyedeekay/sam-forwarder/config"
+	"github.com/9seconds/mtg/proxy"
 	"github.com/eyedeekay/sam-forwarder/interface"
 	"github.com/eyedeekay/sam-forwarder/tcp"
-	"github.com/eyedeekay/sam3/i2pkeys"
 )
 
 // TelegramOutProxy is a SAM-based SOCKS outproxy you connect to with a regular TCP
 // tunnel
 type TelegramOutProxy struct {
-	Forwarder samtunnel.SAMTunnel
+	*samforwarder.SAMForwarder
+    *proxy.Proxy
 	up        bool
 }
 
-func (f *TelegramOutProxy) Config() *i2ptunconf.Conf {
-	return f.Forwarder.Config()
-}
-
-func (f *TelegramOutProxy) ID() string {
-	return f.Config().ID()
-}
-
-func (f *TelegramOutProxy) Keys() i2pkeys.I2PKeys {
-	return f.Forwarder.Keys()
-}
-
-func (f *TelegramOutProxy) Cleanup() {
-	f.Forwarder.Cleanup()
-}
-
 func (f *TelegramOutProxy) GetType() string {
-	return f.Forwarder.GetType()
-}
-
-/*func (f *TelegramOutProxy) targetForPort443() string {
-	if f.TargetForPort443 != "" {
-		return "targetForPort.4443=" + f.TargetHost + ":" + f.TargetForPort443
-	}
-	return ""
-}*/
-
-func (f *TelegramOutProxy) Props() map[string]string {
-	return f.Forwarder.Props()
-}
-
-func (f *TelegramOutProxy) Print() string {
-	return f.Forwarder.Print()
-}
-
-func (f *TelegramOutProxy) Search(search string) string {
-	return f.Forwarder.Search(search)
-}
-
-// Target returns the host:port of the local service you want to forward to i2p
-func (f *TelegramOutProxy) Target() string {
-	return f.Forwarder.Target()
-}
-
-//Base32 returns the base32 address where the local service is being forwarded
-func (f *TelegramOutProxy) Base32() string {
-	return f.Forwarder.Base32()
-}
-
-//Base32Readable returns the base32 address where the local service is being forwarded
-func (f *TelegramOutProxy) Base32Readable() string {
-	return f.Forwarder.Base32Readable()
-}
-
-//Base64 returns the base64 address where the local service is being forwarded
-func (f *TelegramOutProxy) Base64() string {
-	return f.Forwarder.Base64()
+	return "mtproxy"
 }
 
 func (f *TelegramOutProxy) ServeParent() {
 	log.Println("Starting eepsite server", f.Base32())
-	if err := f.Forwarder.Serve(); err != nil {
+	if err := f.SAMForwarder.Serve(); err != nil {
 		f.Cleanup()
 	}
 }
@@ -96,27 +40,15 @@ func (f *TelegramOutProxy) Serve() error {
 	return nil
 }
 
-func (f *TelegramOutProxy) Up() bool {
-	if f.Forwarder.Up() {
-		return true
-	}
-	return false
-}
-
-//Close shuts the whole thing down.
-func (f *TelegramOutProxy) Close() error {
-	return f.Forwarder.Close()
-}
-
 func (s *TelegramOutProxy) Load() (samtunnel.SAMTunnel, error) {
 	if !s.up {
 		log.Println("Started putting tunnel up")
 	}
-	f, e := s.Forwarder.Load()
+	f, e := s.SAMForwarder.Load()
 	if e != nil {
 		return nil, e
 	}
-	s.Forwarder = f.(*samforwarder.SAMForwarder)
+	s.SAMForwarder = f.(*samforwarder.SAMForwarder)
 
 	s.up = true
 	log.Println("Finished putting tunnel up")
@@ -131,7 +63,7 @@ func NewTelegramOutProxyd(host, port string) (*TelegramOutProxy, error) {
 //NewTelegramOutProxydFromOptions makes a new SAM forwarder with default options, accepts host:port arguments
 func NewTelegramOutProxydFromOptions(opts ...func(*TelegramOutProxy) error) (*TelegramOutProxy, error) {
 	var s TelegramOutProxy
-	s.Forwarder = &samforwarder.SAMForwarder{}
+	s.SAMForwarder = &samforwarder.SAMForwarder{}
 	//s.Prox = &Proxy{}
 	log.Println("Initializing outproxy")
 	for _, o := range opts {
@@ -139,7 +71,7 @@ func NewTelegramOutProxydFromOptions(opts ...func(*TelegramOutProxy) error) (*Te
 			return nil, err
 		}
 	}
-	s.Forwarder.Config().SaveFile = true
+	s.SAMForwarder.Config().SaveFile = true
 	log.Println("Options loaded", s.Print())
 	l, e := s.Load()
 	if e != nil {

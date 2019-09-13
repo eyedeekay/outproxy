@@ -4,82 +4,25 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/eyedeekay/sam-forwarder/config"
 	"github.com/eyedeekay/sam-forwarder/interface"
 	"github.com/eyedeekay/sam-forwarder/tcp"
-	"github.com/eyedeekay/sam3/i2pkeys"
 )
 
 // HttpOutProxy is a SAM-based SOCKS outproxy you connect to with a regular TCP
 // tunnel
 type HttpOutProxy struct {
-	Forwarder samtunnel.SAMTunnel
+    *samforwarder.SAMForwarder
 	Prox      *Proxy
 	up        bool
 }
 
-func (f *HttpOutProxy) Config() *i2ptunconf.Conf {
-	return f.Forwarder.Config()
-}
-
-func (f *HttpOutProxy) ID() string {
-	return f.Config().ID()
-}
-
-func (f *HttpOutProxy) Keys() i2pkeys.I2PKeys {
-	return f.Forwarder.Keys()
-}
-
-func (f *HttpOutProxy) Cleanup() {
-	f.Forwarder.Cleanup()
-}
-
 func (f *HttpOutProxy) GetType() string {
-	return f.Forwarder.GetType()
-}
-
-/*func (f *HttpOutProxy) targetForPort443() string {
-	if f.TargetForPort443 != "" {
-		return "targetForPort.4443=" + f.TargetHost + ":" + f.TargetForPort443
-	}
-	return ""
-}*/
-
-func (f *HttpOutProxy) Props() map[string]string {
-	return f.Forwarder.Props()
-}
-
-func (f *HttpOutProxy) Print() string {
-	return f.Forwarder.Print()
-}
-
-func (f *HttpOutProxy) Search(search string) string {
-	return f.Forwarder.Search(search)
-}
-
-// Target returns the host:port of the local service you want to forward to i2p
-func (f *HttpOutProxy) Target() string {
-	return f.Forwarder.Target()
-}
-
-//Base32 returns the base32 address where the local service is being forwarded
-func (f *HttpOutProxy) Base32() string {
-	return f.Forwarder.Base32()
-}
-
-//Base32Readable returns the base32 address where the local service is being forwarded
-func (f *HttpOutProxy) Base32Readable() string {
-	return f.Forwarder.Base32Readable()
-}
-
-//Base64 returns the base64 address where the local service is being forwarded
-func (f *HttpOutProxy) Base64() string {
-	return f.Forwarder.Base64()
+	return "outproxyhttp"
 }
 
 func (f *HttpOutProxy) ServeParent() {
 	log.Println("Starting eepsite server", f.Base32())
-	if err = f.Forwarder.Serve(); err != nil {
+	if err = f.SAMForwarder.Serve(); err != nil {
 		f.Cleanup()
 	}
 }
@@ -96,27 +39,15 @@ func (f *HttpOutProxy) Serve() error {
 	return nil
 }
 
-func (f *HttpOutProxy) Up() bool {
-	if f.Forwarder.Up() {
-		return true
-	}
-	return false
-}
-
-//Close shuts the whole thing down.
-func (f *HttpOutProxy) Close() error {
-	return f.Forwarder.Close()
-}
-
 func (s *HttpOutProxy) Load() (samtunnel.SAMTunnel, error) {
 	if !s.up {
 		log.Println("Started putting tunnel up")
 	}
-	f, e := s.Forwarder.Load()
+	f, e := s.SAMForwarder.Load()
 	if e != nil {
 		return nil, e
 	}
-	s.Forwarder = f.(*samforwarder.SAMForwarder)
+	s.SAMForwarder = f.(*samforwarder.SAMForwarder)
 
 	s.up = true
 	log.Println("Finished putting tunnel up")
@@ -131,7 +62,7 @@ func NewHttpOutProxyd(host, port string) (*HttpOutProxy, error) {
 //NewHttpOutProxydFromOptions makes a new SAM forwarder with default options, accepts host:port arguments
 func NewHttpOutProxydFromOptions(opts ...func(*HttpOutProxy) error) (*HttpOutProxy, error) {
 	var s HttpOutProxy
-	s.Forwarder = &samforwarder.SAMForwarder{}
+	s.SAMForwarder = &samforwarder.SAMForwarder{}
 	s.Prox = &Proxy{}
 	log.Println("Initializing outproxy")
 	for _, o := range opts {
@@ -139,7 +70,7 @@ func NewHttpOutProxydFromOptions(opts ...func(*HttpOutProxy) error) (*HttpOutPro
 			return nil, err
 		}
 	}
-	s.Forwarder.Config().SaveFile = true
+	s.SAMForwarder.Config().SaveFile = true
 	log.Println("Options loaded", s.Print())
 	l, e := s.Load()
 	if e != nil {

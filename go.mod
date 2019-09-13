@@ -3,6 +3,7 @@ module github.com/eyedeekay/outproxy
 go 1.12
 
 require (
+	github.com/9seconds/mtg v0.0.0-20190831103550-c2b8e889619a
 	github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5
 	github.com/eyedeekay/sam-forwarder v0.0.0-20190905212604-029317222e15
 	github.com/eyedeekay/sam3 v0.0.0-20190730185140-f8d54526ea25

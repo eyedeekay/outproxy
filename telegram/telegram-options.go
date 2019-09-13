@@ -11,7 +11,7 @@ type TelegramOption func(*TelegramOutProxy) error
 //SetTelegramFilePath sets the path to save the config file at.
 func SetTelegramFilePath(s string) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
-		c.Forwarder.Config().FilePath = s
+		c.SAMForwarder.Config().FilePath = s
 		return nil
 	}
 }
@@ -20,10 +20,10 @@ func SetTelegramFilePath(s string) func(*TelegramOutProxy) error {
 func SetTelegramType(s string) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if s == "http" {
-			c.Forwarder.Config().Type = s
+			c.SAMForwarder.Config().Type = s
 			return nil
 		} else {
-			c.Forwarder.Config().Type = "server"
+			c.SAMForwarder.Config().Type = "server"
 			return nil
 		}
 	}
@@ -33,19 +33,19 @@ func SetTelegramType(s string) func(*TelegramOutProxy) error {
 func SetTelegramSigType(s string) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if s == "" {
-			c.Forwarder.Config().SigType = ""
+			c.SAMForwarder.Config().SigType = ""
 		} else if s == "DSA_SHA1" {
-			c.Forwarder.Config().SigType = "DSA_SHA1"
+			c.SAMForwarder.Config().SigType = "DSA_SHA1"
 		} else if s == "ECDSA_SHA256_P256" {
-			c.Forwarder.Config().SigType = "ECDSA_SHA256_P256"
+			c.SAMForwarder.Config().SigType = "ECDSA_SHA256_P256"
 		} else if s == "ECDSA_SHA384_P384" {
-			c.Forwarder.Config().SigType = "ECDSA_SHA384_P384"
+			c.SAMForwarder.Config().SigType = "ECDSA_SHA384_P384"
 		} else if s == "ECDSA_SHA512_P521" {
-			c.Forwarder.Config().SigType = "ECDSA_SHA512_P521"
+			c.SAMForwarder.Config().SigType = "ECDSA_SHA512_P521"
 		} else if s == "EdDSA_SHA512_Ed25519" {
-			c.Forwarder.Config().SigType = "EdDSA_SHA512_Ed25519"
+			c.SAMForwarder.Config().SigType = "EdDSA_SHA512_Ed25519"
 		} else {
-			c.Forwarder.Config().SigType = "EdDSA_SHA512_Ed25519"
+			c.SAMForwarder.Config().SigType = "EdDSA_SHA512_Ed25519"
 		}
 		return nil
 	}
@@ -54,7 +54,7 @@ func SetTelegramSigType(s string) func(*TelegramOutProxy) error {
 //SetTelegramSaveFile tells the router to save the tunnel's keys long-term
 func SetTelegramSaveFile(b bool) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
-		c.Forwarder.Config().SaveFile = b
+		c.SAMForwarder.Config().SaveFile = b
 		return nil
 	}
 }
@@ -62,7 +62,7 @@ func SetTelegramSaveFile(b bool) func(*TelegramOutProxy) error {
 //SetTelegramHost sets the host of the service to forward
 func SetTelegramHost(s string) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
-		c.Forwarder.Config().TargetHost = s
+		c.SAMForwarder.Config().TargetHost = s
 		return nil
 	}
 }
@@ -75,7 +75,7 @@ func SetTelegramPort(s string) func(*TelegramOutProxy) error {
 			return fmt.Errorf("Invalid TCP Server Target Port %s; non-number ", s)
 		}
 		if port < 65536 && port > -1 {
-			c.Forwarder.Config().TargetPort = s
+			c.SAMForwarder.Config().TargetPort = s
 			return nil
 		}
 		return fmt.Errorf("Invalid port")
@@ -85,7 +85,7 @@ func SetTelegramPort(s string) func(*TelegramOutProxy) error {
 //SetTelegramSAMHost sets the host of the TelegramOutProxy's SAM bridge
 func SetTelegramSAMHost(s string) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
-		c.Forwarder.Config().SamHost = s
+		c.SAMForwarder.Config().SamHost = s
 		return nil
 	}
 }
@@ -98,7 +98,7 @@ func SetTelegramSAMPort(s string) func(*TelegramOutProxy) error {
 			return fmt.Errorf("Invalid SAM Port %s; non-number", s)
 		}
 		if port < 65536 && port > -1 {
-			c.Forwarder.Config().SamPort = s
+			c.SAMForwarder.Config().SamPort = s
 			return nil
 		}
 		return fmt.Errorf("Invalid port")
@@ -108,7 +108,7 @@ func SetTelegramSAMPort(s string) func(*TelegramOutProxy) error {
 //SetTelegramName sets the host of the TelegramOutProxy's SAM bridge
 func SetTelegramName(s string) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
-		c.Forwarder.Config().TunName = s
+		c.SAMForwarder.Config().TunName = s
 		return nil
 	}
 }
@@ -117,7 +117,7 @@ func SetTelegramName(s string) func(*TelegramOutProxy) error {
 func SetTelegramInLength(u int) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if u < 7 && u >= 0 {
-			c.Forwarder.Config().InLength = u
+			c.SAMForwarder.Config().InLength = u
 			return nil
 		}
 		return fmt.Errorf("Invalid inbound tunnel length")
@@ -128,7 +128,7 @@ func SetTelegramInLength(u int) func(*TelegramOutProxy) error {
 func SetTelegramOutLength(u int) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if u < 7 && u >= 0 {
-			c.Forwarder.Config().OutLength = u
+			c.SAMForwarder.Config().OutLength = u
 			return nil
 		}
 		return fmt.Errorf("Invalid outbound tunnel length")
@@ -139,7 +139,7 @@ func SetTelegramOutLength(u int) func(*TelegramOutProxy) error {
 func SetTelegramInVariance(i int) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if i < 7 && i > -7 {
-			c.Forwarder.Config().InVariance = i
+			c.SAMForwarder.Config().InVariance = i
 			return nil
 		}
 		return fmt.Errorf("Invalid inbound tunnel length")
@@ -150,7 +150,7 @@ func SetTelegramInVariance(i int) func(*TelegramOutProxy) error {
 func SetTelegramOutVariance(i int) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if i < 7 && i > -7 {
-			c.Forwarder.Config().OutVariance = i
+			c.SAMForwarder.Config().OutVariance = i
 			return nil
 		}
 		return fmt.Errorf("Invalid outbound tunnel variance")
@@ -161,7 +161,7 @@ func SetTelegramOutVariance(i int) func(*TelegramOutProxy) error {
 func SetTelegramInQuantity(u int) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if u <= 16 && u > 0 {
-			c.Forwarder.Config().InQuantity = u
+			c.SAMForwarder.Config().InQuantity = u
 			return nil
 		}
 		return fmt.Errorf("Invalid inbound tunnel quantity")
@@ -172,7 +172,7 @@ func SetTelegramInQuantity(u int) func(*TelegramOutProxy) error {
 func SetTelegramOutQuantity(u int) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if u <= 16 && u > 0 {
-			c.Forwarder.Config().OutQuantity = u
+			c.SAMForwarder.Config().OutQuantity = u
 			return nil
 		}
 		return fmt.Errorf("Invalid outbound tunnel quantity")
@@ -183,7 +183,7 @@ func SetTelegramOutQuantity(u int) func(*TelegramOutProxy) error {
 func SetTelegramInBackups(u int) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if u < 6 && u >= 0 {
-			c.Forwarder.Config().InBackupQuantity = u
+			c.SAMForwarder.Config().InBackupQuantity = u
 			return nil
 		}
 		return fmt.Errorf("Invalid inbound tunnel backup quantity")
@@ -194,7 +194,7 @@ func SetTelegramInBackups(u int) func(*TelegramOutProxy) error {
 func SetTelegramOutBackups(u int) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if u < 6 && u >= 0 {
-			c.Forwarder.Config().OutBackupQuantity = u
+			c.SAMForwarder.Config().OutBackupQuantity = u
 			return nil
 		}
 		return fmt.Errorf("Invalid outbound tunnel backup quantity")
@@ -205,10 +205,10 @@ func SetTelegramOutBackups(u int) func(*TelegramOutProxy) error {
 func SetTelegramEncrypt(b bool) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if b {
-			c.Forwarder.Config().EncryptLeaseSet = true
+			c.SAMForwarder.Config().EncryptLeaseSet = true
 			return nil
 		}
-		c.Forwarder.Config().EncryptLeaseSet = false
+		c.SAMForwarder.Config().EncryptLeaseSet = false
 		return nil
 	}
 }
@@ -216,7 +216,7 @@ func SetTelegramEncrypt(b bool) func(*TelegramOutProxy) error {
 //SetTelegramLeaseSetKey sets the host of the TelegramOutProxy's SAM bridge
 func SetTelegramLeaseSetKey(s string) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
-		c.Forwarder.Config().LeaseSetKey = s
+		c.SAMForwarder.Config().LeaseSetKey = s
 		return nil
 	}
 }
@@ -224,7 +224,7 @@ func SetTelegramLeaseSetKey(s string) func(*TelegramOutProxy) error {
 //SetTelegramLeaseSetPrivateKey sets the host of the TelegramOutProxy's SAM bridge
 func SetTelegramLeaseSetPrivateKey(s string) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
-		c.Forwarder.Config().LeaseSetPrivateKey = s
+		c.SAMForwarder.Config().LeaseSetPrivateKey = s
 		return nil
 	}
 }
@@ -232,7 +232,7 @@ func SetTelegramLeaseSetPrivateKey(s string) func(*TelegramOutProxy) error {
 //SetTelegramLeaseSetPrivateSigningKey sets the host of the TelegramOutProxy's SAM bridge
 func SetTelegramLeaseSetPrivateSigningKey(s string) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
-		c.Forwarder.Config().LeaseSetPrivateSigningKey = s
+		c.SAMForwarder.Config().LeaseSetPrivateSigningKey = s
 		return nil
 	}
 }
@@ -240,7 +240,7 @@ func SetTelegramLeaseSetPrivateSigningKey(s string) func(*TelegramOutProxy) erro
 //SetTelegramMessageReliability sets the host of the TelegramOutProxy's SAM bridge
 func SetTelegramMessageReliability(s string) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
-		c.Forwarder.Config().MessageReliability = s
+		c.SAMForwarder.Config().MessageReliability = s
 		return nil
 	}
 }
@@ -249,10 +249,10 @@ func SetTelegramMessageReliability(s string) func(*TelegramOutProxy) error {
 func SetTelegramAllowZeroIn(b bool) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if b {
-			c.Forwarder.Config().InAllowZeroHop = true
+			c.SAMForwarder.Config().InAllowZeroHop = true
 			return nil
 		}
-		c.Forwarder.Config().InAllowZeroHop = false
+		c.SAMForwarder.Config().InAllowZeroHop = false
 		return nil
 	}
 }
@@ -261,10 +261,10 @@ func SetTelegramAllowZeroIn(b bool) func(*TelegramOutProxy) error {
 func SetTelegramAllowZeroOut(b bool) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if b {
-			c.Forwarder.Config().OutAllowZeroHop = true
+			c.SAMForwarder.Config().OutAllowZeroHop = true
 			return nil
 		}
-		c.Forwarder.Config().OutAllowZeroHop = false
+		c.SAMForwarder.Config().OutAllowZeroHop = false
 		return nil
 	}
 }
@@ -273,10 +273,10 @@ func SetTelegramAllowZeroOut(b bool) func(*TelegramOutProxy) error {
 func SetTelegramCompress(b bool) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if b {
-			c.Forwarder.Config().UseCompression = true
+			c.SAMForwarder.Config().UseCompression = true
 			return nil
 		}
-		c.Forwarder.Config().UseCompression = false
+		c.SAMForwarder.Config().UseCompression = false
 		return nil
 	}
 }
@@ -285,10 +285,10 @@ func SetTelegramCompress(b bool) func(*TelegramOutProxy) error {
 func SetTelegramFastRecieve(b bool) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if b {
-			c.Forwarder.Config().FastRecieve = true
+			c.SAMForwarder.Config().FastRecieve = true
 			return nil
 		}
-		c.Forwarder.Config().FastRecieve = false
+		c.SAMForwarder.Config().FastRecieve = false
 		return nil
 	}
 }
@@ -297,10 +297,10 @@ func SetTelegramFastRecieve(b bool) func(*TelegramOutProxy) error {
 func SetTelegramReduceIdle(b bool) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if b {
-			c.Forwarder.Config().ReduceIdle = true
+			c.SAMForwarder.Config().ReduceIdle = true
 			return nil
 		}
-		c.Forwarder.Config().ReduceIdle = false
+		c.SAMForwarder.Config().ReduceIdle = false
 		return nil
 	}
 }
@@ -308,9 +308,9 @@ func SetTelegramReduceIdle(b bool) func(*TelegramOutProxy) error {
 //SetTelegramReduceIdleTime sets the time to wait before reducing tunnels to idle levels
 func SetTelegramReduceIdleTime(u int) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
-		c.Forwarder.Config().ReduceIdleTime = 300000
+		c.SAMForwarder.Config().ReduceIdleTime = 300000
 		if u >= 6 {
-			c.Forwarder.Config().ReduceIdleTime = (u * 60) * 1000
+			c.SAMForwarder.Config().ReduceIdleTime = (u * 60) * 1000
 			return nil
 		}
 		return fmt.Errorf("Invalid reduce idle timeout(Measured in minutes) %v", u)
@@ -320,9 +320,9 @@ func SetTelegramReduceIdleTime(u int) func(*TelegramOutProxy) error {
 //SetTelegramReduceIdleTimeMs sets the time to wait before reducing tunnels to idle levels in milliseconds
 func SetTelegramReduceIdleTimeMs(u int) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
-		c.Forwarder.Config().ReduceIdleTime = 300000
+		c.SAMForwarder.Config().ReduceIdleTime = 300000
 		if u >= 300000 {
-			c.Forwarder.Config().ReduceIdleTime = u
+			c.SAMForwarder.Config().ReduceIdleTime = u
 			return nil
 		}
 		return fmt.Errorf("Invalid reduce idle timeout(Measured in milliseconds) %v", u)
@@ -333,7 +333,7 @@ func SetTelegramReduceIdleTimeMs(u int) func(*TelegramOutProxy) error {
 func SetTelegramReduceIdleQuantity(u int) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if u < 5 {
-			c.Forwarder.Config().ReduceIdleQuantity = u
+			c.SAMForwarder.Config().ReduceIdleQuantity = u
 			return nil
 		}
 		return fmt.Errorf("Invalid reduce tunnel quantity")
@@ -344,10 +344,10 @@ func SetTelegramReduceIdleQuantity(u int) func(*TelegramOutProxy) error {
 func SetTelegramCloseIdle(b bool) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if b {
-			c.Forwarder.Config().CloseIdle = true
+			c.SAMForwarder.Config().CloseIdle = true
 			return nil
 		}
-		c.Forwarder.Config().CloseIdle = false
+		c.SAMForwarder.Config().CloseIdle = false
 		return nil
 	}
 }
@@ -355,9 +355,9 @@ func SetTelegramCloseIdle(b bool) func(*TelegramOutProxy) error {
 //SetTelegramCloseIdleTime sets the time to wait before closing tunnels to idle levels
 func SetTelegramCloseIdleTime(u int) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
-		c.Forwarder.Config().CloseIdleTime = 300000
+		c.SAMForwarder.Config().CloseIdleTime = 300000
 		if u >= 6 {
-			c.Forwarder.Config().CloseIdleTime = (u * 60) * 1000
+			c.SAMForwarder.Config().CloseIdleTime = (u * 60) * 1000
 			return nil
 		}
 		return fmt.Errorf("Invalid close idle timeout(Measured in minutes) %v", u)
@@ -367,9 +367,9 @@ func SetTelegramCloseIdleTime(u int) func(*TelegramOutProxy) error {
 //SetTelegramCloseIdleTimeMs sets the time to wait before closing tunnels to idle levels in milliseconds
 func SetTelegramCloseIdleTimeMs(u int) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
-		c.Forwarder.Config().CloseIdleTime = 300000
+		c.SAMForwarder.Config().CloseIdleTime = 300000
 		if u >= 300000 {
-			c.Forwarder.Config().CloseIdleTime = u
+			c.SAMForwarder.Config().CloseIdleTime = u
 			return nil
 		}
 		return fmt.Errorf("Invalid close idle timeout(Measured in milliseconds) %v", u)
@@ -380,16 +380,16 @@ func SetTelegramCloseIdleTimeMs(u int) func(*TelegramOutProxy) error {
 func SetTelegramAccessListType(s string) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if s == "whitelist" {
-			c.Forwarder.Config().AccessListType = "whitelist"
+			c.SAMForwarder.Config().AccessListType = "whitelist"
 			return nil
 		} else if s == "blacklist" {
-			c.Forwarder.Config().AccessListType = "blacklist"
+			c.SAMForwarder.Config().AccessListType = "blacklist"
 			return nil
 		} else if s == "none" {
-			c.Forwarder.Config().AccessListType = ""
+			c.SAMForwarder.Config().AccessListType = ""
 			return nil
 		} else if s == "" {
-			c.Forwarder.Config().AccessListType = ""
+			c.SAMForwarder.Config().AccessListType = ""
 			return nil
 		}
 		return fmt.Errorf("Invalid Access list type(whitelist, blacklist, none)")
@@ -401,7 +401,7 @@ func SetTelegramAccessList(s []string) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
 		if len(s) > 0 {
 			for _, a := range s {
-				c.Forwarder.Config().AccessList = append(c.Forwarder.Config().AccessList, a)
+				c.SAMForwarder.Config().AccessList = append(c.SAMForwarder.Config().AccessList, a)
 			}
 			return nil
 		}
@@ -417,7 +417,7 @@ func SetTelegramAccessList(s []string) func(*TelegramOutProxy) error {
 			return fmt.Errorf("Invalid Target Port %s; non-number ", s)
 		}
 		if port < 65536 && port > -1 {
-			c.Forwarder.Config().TargetForPort443 = s
+			c.SAMForwarder.Config().TargetForPort443 = s
 			return nil
 		}
 		return fmt.Errorf("Invalid port")
@@ -428,7 +428,7 @@ func SetTelegramAccessList(s []string) func(*TelegramOutProxy) error {
 //SetTelegramKeyFile sets
 func SetTelegramKeyFile(s string) func(*TelegramOutProxy) error {
 	return func(c *TelegramOutProxy) error {
-		c.Forwarder.Config().KeyFilePath = s
+		c.SAMForwarder.Config().KeyFilePath = s
 		return nil
 	}
 }
