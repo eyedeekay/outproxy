@@ -2,7 +2,7 @@ package outproxy
 
 import (
 	"fmt"
-    "net"
+	"net"
 	"strconv"
 )
 
@@ -436,27 +436,27 @@ func SetKeyFile(s string) func(*OutProxy) error {
 
 func SetPorts(s []int) func(*OutProxy) error {
 	return func(c *OutProxy) error {
-        for _, v := range s {
-            c.Conf.Rules.(*SocksRuleSet).Ports = append(c.Conf.Rules.(*SocksRuleSet).Ports, v)
-        }
+		for _, v := range s {
+			c.Conf.Rules.(*SocksRuleSet).Ports = append(c.Conf.Rules.(*SocksRuleSet).Ports, v)
+		}
 		return nil
 	}
 }
 
 func SetDomains(s []string) func(*OutProxy) error {
 	return func(c *OutProxy) error {
-        for _, v := range s {
-            c.Conf.Rules.(*SocksRuleSet).Domains = append(c.Conf.Rules.(*SocksRuleSet).Domains, v)
-        }
+		for _, v := range s {
+			c.Conf.Rules.(*SocksRuleSet).Domains = append(c.Conf.Rules.(*SocksRuleSet).Domains, v)
+		}
 		return nil
 	}
 }
 
 func SetIPs(s []net.IP) func(*OutProxy) error {
 	return func(c *OutProxy) error {
-        for _, v := range s {
-            c.Conf.Rules.(*SocksRuleSet).IPs = append(c.Conf.Rules.(*SocksRuleSet).IPs, v)
-        }
+		for _, v := range s {
+			c.Conf.Rules.(*SocksRuleSet).IPs = append(c.Conf.Rules.(*SocksRuleSet).IPs, v)
+		}
 		return nil
 	}
 }

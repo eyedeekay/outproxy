@@ -1,9 +1,9 @@
 package outproxy
 
 import (
+	"golang.org/x/time/rate"
 	"log"
-    "net"
-    "golang.org/x/time/rate"
+	"net"
 
 	"github.com/armon/go-socks5"
 	"github.com/eyedeekay/sam-forwarder/interface"
@@ -13,10 +13,10 @@ import (
 // OutProxy is a SAM-based SOCKS outproxy you connect to with a regular TCP
 // tunnel
 type OutProxy struct {
-    *samforwarder.SAMForwarder
-	Conf      *socks5.Config
-	Socks     *socks5.Server
-	up        bool
+	*samforwarder.SAMForwarder
+	Conf  *socks5.Config
+	Socks *socks5.Server
+	up    bool
 }
 
 var err error
@@ -78,13 +78,13 @@ func NewOutProxyFromOptions(opts ...func(*OutProxy) error) (*OutProxy, error) {
 	s.SAMForwarder = &samforwarder.SAMForwarder{}
 	s.Conf = &socks5.Config{
 		Rules: &SocksRuleSet{
-			Ports:     []int{80, 443},
-			Domains:   []string{""},
-			IPs:       []net.IP{},
-			Limit:     -1,
-            Rate:      make(map[string]*rate.Limiter),
-			Burst:     -1,
-			Default:   true,
+			Ports:   []int{80, 443},
+			Domains: []string{""},
+			IPs:     []net.IP{},
+			Limit:   -1,
+			Rate:    make(map[string]*rate.Limiter),
+			Burst:   -1,
+			Default: true,
 		},
 	}
 	log.Println("Initializing outproxy")

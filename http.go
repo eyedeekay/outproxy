@@ -11,9 +11,9 @@ import (
 // HttpOutProxy is a SAM-based SOCKS outproxy you connect to with a regular TCP
 // tunnel
 type HttpOutProxy struct {
-    *samforwarder.SAMForwarder
-	Prox      *Proxy
-	up        bool
+	*samforwarder.SAMForwarder
+	Prox *Proxy
+	up   bool
 }
 
 func (f *HttpOutProxy) GetType() string {

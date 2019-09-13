@@ -1,11 +1,10 @@
 package tgtun
 
-
 import (
 	"log"
 
+	"github.com/9seconds/mtg/config"
 	"github.com/9seconds/mtg/proxy"
-    "github.com/9seconds/mtg/config"
 	"github.com/eyedeekay/sam-forwarder/interface"
 	"github.com/eyedeekay/sam-forwarder/tcp"
 )
@@ -14,9 +13,9 @@ import (
 // tunnel
 type TelegramOutProxy struct {
 	*samforwarder.SAMForwarder
-    *proxy.Proxy
-    Conf  *config.Config
-	up    bool
+	*proxy.Proxy
+	Conf *config.Config
+	up   bool
 }
 
 func (f *TelegramOutProxy) GetType() string {

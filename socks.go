@@ -8,12 +8,12 @@ import (
 )
 
 type SocksRuleSet struct {
-	Ports     []int
-	Domains   []string
-	IPs       []net.IP
-	Rate      map[string]*rate.Limiter
-	Limit     float64
-	Burst     int
+	Ports   []int
+	Domains []string
+	IPs     []net.IP
+	Rate    map[string]*rate.Limiter
+	Limit   float64
+	Burst   int
 
 	Default bool
 }
