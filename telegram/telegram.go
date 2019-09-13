@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/9seconds/mtg/proxy"
+    "github.com/9seconds/mtg/config"
 	"github.com/eyedeekay/sam-forwarder/interface"
 	"github.com/eyedeekay/sam-forwarder/tcp"
 )
@@ -14,7 +15,8 @@ import (
 type TelegramOutProxy struct {
 	*samforwarder.SAMForwarder
     *proxy.Proxy
-	up        bool
+    Conf  *config.Config
+	up    bool
 }
 
 func (f *TelegramOutProxy) GetType() string {
